@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test d'Addiction aux Réseaux Sociaux | Basé sur la Psychologie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Vibrant Cyber-Psychology Palette */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.15), 0 8px 10px -6px rgba(124, 58, 237, 0.1);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .option-btn:hover {
+            transform: scale(1.02);
+            border-color: #7c3aed;
+        }
+        
+        .progress-bar-fill {
+            transition: width 0.3s ease;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- HERO / HEADER -->
+    <header class="w-full bg-white shadow-sm py-6">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-3xl font-bold tracking-tight text-slate-800">
+                Psycho<span class="text-cyan-500">Test</span>
+            </h1>
+            <p class="text-slate-500 text-sm mt-1">Évaluez votre dépendance numérique</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <!-- INTRO VIEW -->
+        <div id="intro-view" class="max-w-2xl w-full bg-white rounded-3xl card-shadow p-8 md:p-12 text-center fade-in">
+            <div class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-100 text-violet-600 text-3xl">
+                🧠
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-slate-800">
+                Êtes-vous <span class="text-gradient">Accro</span> ?
+            </h2>
+            <p class="text-slate-600 mb-8 leading-relaxed">
+                Basé sur les recherches en psychologie sociale (Festinger, Goffman), ce test analyse vos comportements liés au <strong>FOMO</strong>, à la <strong>comparaison sociale</strong> et à la <strong>dopamine</strong>.
+                <br><br>
+                Répondez honnêtement à 10 questions pour découvrir votre profil.
+            </p>
+            <button onclick="startQuiz()" class="bg-gradient-primary text-white font-bold py-4 px-10 rounded-full shadow-lg hover:shadow-xl hover:opacity-90 transition transform hover:-translate-y-1 w-full md:w-auto">
+                Commencer le Test
+            </button>
+            <p class="text-xs text-slate-400 mt-6">Ce test est à but éducatif et ne remplace pas un diagnostic médical.</p>
+        </div>
+
+        <!-- QUIZ VIEW (Hidden initially) -->
+        <div id="quiz-view" class="hidden max-w-2xl w-full bg-white rounded-3xl card-shadow p-8 md:p-12 relative">
+            <!-- Progress -->
+            <div class="w-full bg-slate-100 rounded-full h-2.5 mb-8">
+                <div id="progress-bar" class="bg-gradient-primary h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+
+            <!-- Question -->
+            <div id="question-container" class="fade-in">
+                <h3 id="question-category" class="text-cyan-600 font-bold text-sm uppercase tracking-wide mb-2">Catégorie</h3>
+                <h2 id="question-text" class="text-2xl font-bold text-slate-800 mb-8 h-20 flex items-center">
+                    Question text goes here...
+                </h2>
+
+                <!-- Options -->
+                <div class="space-y-3">
+                    <button onclick="handleAnswer(0)" class="option-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition font-medium text-slate-600 group">
+                        <span class="w-6 h-6 rounded-full border border-slate-300 inline-block mr-3 group-hover:border-violet-500 group-hover:bg-violet-50"></span>
+                        Jamais
+                    </button>
+                    <button onclick="handleAnswer(1)" class="option-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition font-medium text-slate-600 group">
+                        <span class="w-6 h-6 rounded-full border border-slate-300 inline-block mr-3 group-hover:border-violet-500 group-hover:bg-violet-50"></span>
+                        Rarement
+                    </button>
+                    <button onclick="handleAnswer(2)" class="option-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition font-medium text-slate-600 group">
+                        <span class="w-6 h-6 rounded-full border border-slate-300 inline-block mr-3 group-hover:border-violet-500 group-hover:bg-violet-50"></span>
+                        Parfois
+                    </button>
+                    <button onclick="handleAnswer(3)" class="option-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition font-medium text-slate-600 group">
+                        <span class="w-6 h-6 rounded-full border border-slate-300 inline-block mr-3 group-hover:border-violet-500 group-hover:bg-violet-50"></span>
+                        Souvent
+                    </button>
+                    <button onclick="handleAnswer(4)" class="option-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition font-medium text-slate-600 group">
+                        <span class="w-6 h-6 rounded-full border border-slate-300 inline-block mr-3 group-hover:border-violet-500 group-hover:bg-violet-50"></span>
+                        Toujours / Très Souvent
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS VIEW (Hidden initially) -->
+        <div id="results-view" class="hidden max-w-4xl w-full fade-in space-y-8">
+            
+            <!-- Result Header Card -->
+            <div class="bg-white rounded-3xl card-shadow p-8 md:p-12 text-center relative overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-slate-500 font-semibold uppercase tracking-widest text-sm mb-2">Votre Résultat</h2>
+                        <h3 id="result-title" class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-4">Analysing...</h3>
+                        <p id="result-description" class="text-slate-600 leading-relaxed mb-6">
+                            Description...
+                        </p>
+                        <div id="badge-container"></div>
+                    </div>
+                    <div class="flex justify-center items-center">
+                        <div class="chart-container">
+                            <canvas id="scoreChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis & Solutions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Analysis -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <span>🔍</span> Analyse Psychologique
+                    </h4>
+                    <ul id="analysis-list" class="space-y-4 text-sm text-slate-600">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <!-- Action Plan -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl">
+                    <h4 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span>🛡️</span> Plan d'Action (Détox)
+                    </h4>
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0">1</div>
+                            <div>
+                                <strong class="block text-violet-300">Bien-être Numérique</strong>
+                                <span class="text-slate-400 text-sm">Désactivez les notifications non essentielles (Dopamine).</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center shrink-0">2</div>
+                            <div>
+                                <strong class="block text-cyan-300">Interactions Réelles</strong>
+                                <span class="text-slate-400 text-sm">Bannissez le téléphone pendant les repas (Stop Phubbing).</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-fuchsia-600 flex items-center justify-center shrink-0">3</div>
+                            <div>
+                                <strong class="block text-fuchsia-300">Esprit Critique</strong>
+                                <span class="text-slate-400 text-sm">Rappelez-vous : Instagram est une vitrine, pas la réalité (Goffman).</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="location.reload()" class="text-slate-500 hover:text-violet-600 font-semibold underline decoration-2 underline-offset-4 transition">
+                    Refaire le test
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-6 text-slate-400 text-xs">
+        &copy; raw daly ostora
+    </footer>
+
+    <script>
+        // --- DATA: Questions based on PDF content ---
+        const questions = [
+            {
+                category: "FOMO (Fear of Missing Out)",
+                text: "Consultez-vous votre téléphone dès le réveil, avant même de vous lever ?",
+                weight: "fomo"
+            },
+            {
+                category: "Comparaison Sociale",
+                text: "Vous arrive-t-il de vous sentir 'moins bien' après avoir vu les posts des autres ?",
+                weight: "comparison"
+            },
+            {
+                category: "Dopamine & Validation",
+                text: "Ressentez-vous une déception si une photo ne reçoit pas assez de likes ?",
+                weight: "validation"
+            },
+            {
+                category: "Phubbing (Interaction Réelle)",
+                text: "Utilisez-vous votre téléphone alors que vous êtes à table avec des amis ou la famille ?",
+                weight: "social"
+            },
+            {
+                category: "Sommeil & Santé",
+                text: "Vos heures de coucher sont-elles retardées à cause du 'scroll' infini ?",
+                weight: "health"
+            },
+            {
+                category: "Anxiété",
+                text: "Ressentez-vous du stress ou de l'agitation lorsque vous n'avez pas de réseau ?",
+                weight: "anxiety"
+            },
+            {
+                category: "Concentration",
+                text: "Avez-vous du mal à regarder un film entier sans vérifier votre téléphone ?",
+                weight: "focus"
+            },
+            {
+                category: "Biais de Conformité",
+                text: "Modifiez-vous vos opinions ou vos photos pour qu'elles plaisent au plus grand nombre ?",
+                weight: "identity"
+            },
+            {
+                category: "Perception du Temps",
+                text: "Vous dites-vous souvent 'juste 5 minutes' pour y passer finalement 1 heure ?",
+                weight: "control"
+            },
+            {
+                category: "Humeur",
+                text: "Utilisez-vous les réseaux sociaux pour fuir des émotions négatives (tristesse, ennui) ?",
+                weight: "coping"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let maxScore = questions.length * 4; // 0 to 4 scale
+        let breakdown = {}; // To store specific weakness areas if needed later
+
+        // --- DOM ELEMENTS ---
+        const introView = document.getElementById('intro-view');
+        const quizView = document.getElementById('quiz-view');
+        const resultsView = document.getElementById('results-view');
+        
+        const questionText = document.getElementById('question-text');
+        const questionCategory = document.getElementById('question-category');
+        const progressBar = document.getElementById('progress-bar');
+
+        // --- LOGIC ---
+
+        function startQuiz() {
+            introView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            quizView.classList.add('fade-in');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            questionCategory.innerText = q.category;
+            questionText.innerText = q.text;
+            
+            // Animation reset for text
+            questionText.classList.remove('fade-in');
+            void questionText.offsetWidth; // trigger reflow
+            questionText.classList.add('fade-in');
+
+            // Update Progress
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function handleAnswer(score) {
+            totalScore += score;
+            
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            quizView.classList.add('hidden');
+            resultsView.classList.remove('hidden');
+            calculateResults();
+        }
+
+        function calculateResults() {
+            const percentage = (totalScore / maxScore) * 100;
+            let title, desc, color, badge;
+            let analysisPoints = [];
+
+            if (percentage < 25) {
+                title = "Usage Équilibré";
+                desc = "Bravo ! Vous contrôlez parfaitement votre vie numérique. Les réseaux sont un outil pour vous, pas une contrainte.";
+                color = "#22c55e"; // Green
+                badge = "bg-green-100 text-green-700";
+                analysisPoints = [
+                    "Votre estime de soi semble indépendante des likes.",
+                    "Vous privilégiez la qualité des interactions réelles."
+                ];
+            } else if (percentage < 50) {
+                title = "Usage Modéré";
+                desc = "Vous avez une utilisation normale, mais restez vigilant. Certains mécanismes (comme le scroll avant de dormir) commencent à s'installer.";
+                color = "#06b6d4"; // Cyan
+                badge = "bg-cyan-100 text-cyan-700";
+                analysisPoints = [
+                    "Attention au FOMO léger qui peut survenir.",
+                    "Essayez de instaurer des zones 'sans téléphone' chez vous."
+                ];
+            } else if (percentage < 75) {
+                title = "Risque de Dépendance";
+                desc = "Les signaux d'alerte sont là. La comparaison sociale et la boucle de dopamine affectent votre humeur et votre temps.";
+                color = "#f59e0b"; // Orange
+                badge = "bg-orange-100 text-orange-700";
+                analysisPoints = [
+                    "Forte sensibilité à la validation sociale (Dopamine).",
+                    "Le sommeil et la concentration sont probablement impactés.",
+                    "Tendance à la comparaison ascendante (Festinger)."
+                ];
+            } else {
+                title = "Dépendance Élevée";
+                desc = "Les réseaux sociaux dominent votre quotidien. Il est urgent de reprendre le contrôle pour protéger votre santé mentale.";
+                color = "#ef4444"; // Red
+                badge = "bg-red-100 text-red-700";
+                analysisPoints = [
+                    "Cycle FOMO / Anxiété très actif.",
+                    "Phénomène de Phubbing (isolement social réel).",
+                    "Risque élevé pour l'estime de soi et le bien-être."
+                ];
+            }
+
+            // Update DOM
+            document.getElementById('result-title').innerText = title;
+            document.getElementById('result-title').style.color = color;
+            document.getElementById('result-description').innerText = desc;
+            
+            const badgeEl = document.getElementById('badge-container');
+            badgeEl.innerHTML = `<span class="inline-block px-4 py-2 rounded-full font-bold text-sm ${badge}">${Math.round(percentage)}% d'Addiction</span>`;
+
+            const list = document.getElementById('analysis-list');
+            list.innerHTML = analysisPoints.map(p => `<li class="flex items-start gap-2"><span class="text-violet-500 mt-1">●</span> ${p}</li>`).join('');
+
+            // Render Chart
+            renderChart(totalScore, maxScore - totalScore, color);
+        }
+
+        function renderChart(score, remaining, color) {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Votre Score', 'Potentiel Restant'],
+                    datasets: [{
+                        data: [score, remaining],
+                        backgroundColor: [
+                            color,
+                            '#e2e8f0'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                },
+                plugins: [{
+                    id: 'textCenter',
+                    beforeDraw: function(chart) {
+                        var width = chart.width,
+                            height = chart.height,
+                            ctx = chart.ctx;
+            
+                        ctx.restore();
+                        var fontSize = (height / 114).toFixed(2);
+                        ctx.font = "bold " + fontSize + "em sans-serif";
+                        ctx.textBaseline = "middle";
+                        ctx.fillStyle = color;
+            
+                        var text = score + "/" + (score + remaining),
+                            textX = Math.round((width - ctx.measureText(text).width) / 2),
+                            textY = height / 2;
+            
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    }
+                }]
+            });
+        }
+    </script>
+</body>
+</html>
